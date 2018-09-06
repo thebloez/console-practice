@@ -1,5 +1,6 @@
 package com.thebloez.thread;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadSleep {
@@ -28,7 +29,7 @@ public class ThreadSleep {
         };
 
         final AtomicInteger index= new AtomicInteger();
-        Runnable runnable = () -> {
+        Callable<Integer> runnable = () -> {
             for (int i = 0; i < messages.length; i++) {
                 System.out.println(messages[i]);
                 try {
@@ -40,9 +41,11 @@ public class ThreadSleep {
                 index.set(i+1);
             }
             System.out.println("break at line  " + index);
+            Integer idx = index.intValue();
+            return idx;
         };
 
-        Thread thread = new Thread(runnable);
+        Thread thread = new Thread((Runnable) runnable);
         thread.start();
         System.out.println("that's running from thread : " + thread.getName());
 
